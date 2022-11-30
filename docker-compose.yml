@@ -10,7 +10,7 @@ services:
       - .env
     # command: ping 1.1.1.1
     volumes:
-      - /home/parsa/projects/dentai-brain/brain/main/flask-app/app:/home/brain/app/
+      - ${PWD}:/home/brain/app/
     expose:
       - 8000
     command: > 
