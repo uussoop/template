@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  api:
+    container_name: dentai-brain-api
+    restart: always
+    build: ./flask-app
+    env_file:
+      - .env
+    # command: ping 1.1.1.1
+    volumes:
+      - ${PWD}/flask-app/full:/home/brain/app/
+    expose:
+      - 8002
+    command: > 
+     sh -c "
+      flask db init &&
+      flask db migrate &&
+      flask db upgrade &&
+      gunicorn --reload --workers 4 --bind 0.0.0.0:8002 --chdir /home/brain/app  wsgi:app"
+# gunicorn -w 1 -b :8000 app:server
+
+  nginx:
+    container_name: brain-reverse-proxy-nginx
+    build: nginx
+    ports:
+      - 8001:8001
+    # command: ping 1.1.1.1
+    # env_file:
+    #   - .env
+    # volumes:
+    #   - static-volume:/${Path_to}/app/static
