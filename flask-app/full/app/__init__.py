@@ -29,6 +29,7 @@ from flask_restful import Resource, Api
 # from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate, migrate
 from sqlalchemy import select
+import logging
 
 # from api.api import Hello
 import os
@@ -40,7 +41,10 @@ app = Flask(__name__)
 apis = Api(app)
 # adding configuration for using a sqlite database
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
-
+if __name__ != "__main__":
+    gunicorn_logger = logging.getLogger("gunicorn.error")
+    app.logger.handlers = gunicorn_logger.handlers
+    app.logger.setLevel(gunicorn_logger.level)
 from app.models.database import db
 
 # Creating an SQLAlchemy instance

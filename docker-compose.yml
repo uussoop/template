@@ -18,7 +18,7 @@ services:
       flask db init &&
       flask db migrate &&
       flask db upgrade &&
-      gunicorn --reload --workers 4 --bind 0.0.0.0:8002 --chdir /home/brain/app  wsgi:app"
+      gunicorn --log-level ${llevel} --reload --workers 4 --bind 0.0.0.0:8002 --chdir /home/brain/app  wsgi:app"
 # gunicorn -w 1 -b :8000 app:server
 
   nginx:
