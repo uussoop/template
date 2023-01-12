@@ -16,3 +16,5 @@ do
         echo $line
     fi
 done
+
+# container > pipe > reader > model > pipe2 > container

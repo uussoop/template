@@ -2,6 +2,7 @@
 # set -x
 
 # initiat any other program ie docker compose in detached mode
+
 servicename="myapp"
 mypath=$(pwd)
 description="doing ai stuff"
@@ -23,6 +24,5 @@ else
     [Install]
     WantedBy=multi-user.target" > /lib/systemd/system/$servicename.service
 fi
-
-
-# touch /lib/systemd/system/$servicename.service 
+systemctl enable $servicename.service
+systemctl start $servicename.service
