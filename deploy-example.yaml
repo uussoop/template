@@ -13,6 +13,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Telegram Commit Notification
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+            *New Commit Pushed*
+            _Time:_ `${{ steps.current-time.outputs.time }}`
+            _Branch:_ `${{ github.ref }}`
+            _Committer:_ `${{ github.actor }}`
+            
+            Commit Message:
+            `${{ github.event.commits[0].message }}`
     
     - uses: actions/checkout@master
     - name: Install SSH key 
@@ -37,3 +50,19 @@ jobs:
           echo "PORT=${{ vars.PORT }}" >> .env
           docker compose up -d --build
         '
+    - name: Telegram Workflow Status
+      if: always() 
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        status: ${{ job.status }}
+        message: |
+          *Workflow Completed*
+          
+          _Time:_ `${{ steps.current-time.outputs.time }}`
+          _Workflow:_ `${{ github.workflow }}`  
+          _Status:_ `${{ job.status }}`
+          
+          _Run URL:_ [${{ github.run_number }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+      continue-on-error: false
