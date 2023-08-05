@@ -18,6 +18,7 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
         message: |
             *New Commit Pushed*
             _Time:_ `${{ steps.current-time.outputs.time }}`
@@ -57,6 +58,7 @@ jobs:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         status: ${{ job.status }}
+        format: markdown
         message: |
           *Workflow Completed*
           
