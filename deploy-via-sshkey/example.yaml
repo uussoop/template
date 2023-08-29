@@ -1,0 +1,40 @@
+name: Docker Build
+
+on: 
+  push:
+    branches:
+      - master
+
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@master
+    - name: Install SSH key 
+      run: |
+        mkdir -p ~/.ssh
+        echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        chmod 600 ~/.ssh/id_rsa
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      continue-on-error: false
+    - name: Run deployment scripts
+
+      run: |
+        ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ vars.USERNAME }}@${{ vars.HOST }} '
+          eval $(ssh-agent -s)
+          ssh-add ~/.ssh/*
+          cd ${{ vars.DEPLOY_PATH }}
+          rm -rf gptb/
+          git clone git@github.com:${{ github.repository }} 
+          cd ${{ vars.DEPLOY_PATH }}gptb/
+          echo "OPENAI_KEY=${{ secrets.API_KEY }}" > .env
+          echo "PORT=${{ vars.PORT }}" >> .env
+          docker compose up -d --build
+        '
+      continue-on-error: false

@@ -1,0 +1,34 @@
+name: Docker Build
+
+on: 
+  push:
+    branches:
+      - master
+
+env:
+  DOCKER_REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    
+    - uses: actions/checkout@v3
+
+    - name: Docker login
+      run: |
+        echo ${{ secrets.TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+    - name: Build example1 image
+      run: |
+        docker build -t $DOCKER_REGISTRY/$IMAGE_NAME/example1:latest -f Dockerfile_example1 .
+        docker push $DOCKER_REGISTRY/$IMAGE_NAME/example1:latest
+
+    - name: Build example2 image 
+      run: |
+        docker build -t $DOCKER_REGISTRY/$IMAGE_NAME/example2:latest -f Dockerfile_example2 .
+        docker push $DOCKER_REGISTRY/$IMAGE_NAME/example2:latest
