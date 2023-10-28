@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  mongo:
+    image: mongo
+    container_name: mongodb-test
+    volumes:
+
+      - ./data/mongo_data:/data/db
+      - ./data/mongo_fixtures:/import
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
