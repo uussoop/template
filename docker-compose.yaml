@@ -1,0 +1,9 @@
+services:
+  test:
+    build:
+      context: .
+      args:
+        - GITHUB_ACCESS_TOKEN
+    container_name: go-private-repo-build
+    env_file:
+      - .env
