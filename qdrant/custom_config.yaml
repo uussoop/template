@@ -99,7 +99,7 @@ storage:
     # Number of parallel threads used for background index building. If 0 - auto selection.
     max_indexing_threads: 0
     # Store HNSW index on disk. If set to false, index will be stored in RAM. Default: false
-    on_disk: false
+    on_disk: true
     # Custom M param for hnsw graph built for payload index. If not set, default M will be used.
     payload_m: null
 
